@@ -21,14 +21,15 @@ public class CameraController : MonoBehaviour
         var inp = InputManager.Instance.Actions.MouseDelta.ReadValue<Vector2>();
 
 
+        pitchAngle -= inp.y * camSpeed * Time.deltaTime;
+        yawAgnle += inp.x * camSpeed * Time.deltaTime;
 
+        pitchAngle = Mathf.Clamp(pitchAngle, -80, 80);
+
+        yawAgnle = yawAgnle >= 360 ? yawAgnle - 360 : yawAgnle < 0 ? yawAgnle + 360 : yawAgnle;
 
 
         Vector3 eulerAngles = new Vector3(pitchAngle, yawAgnle, 0);
-
-
-
-
 
         cameraOffset.localRotation = Quaternion.Euler(eulerAngles);
     }

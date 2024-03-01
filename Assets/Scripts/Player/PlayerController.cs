@@ -7,12 +7,14 @@ public class PlayerController : MonoBehaviour
 
     [Header("Dependencies")]
     [SerializeField] Rigidbody rb;
+    [SerializeField] PlayerAnimator anim;
 
 
     [Header("Movement Values")]
     [SerializeField] float speed;
     [SerializeField] float jumpValue;
     [SerializeField] float gravityAmount;
+    [SerializeField] float accel = 10f;
 
 
 
@@ -38,6 +40,10 @@ public class PlayerController : MonoBehaviour
     Vector3 GroundNormal => groundNormal.normalized;
     Vector3 SteepNormal => steepNormal.normalized;
 
+
+    Vector3 lastHeading = Vector3.forward;
+
+    public Vector3 Heading => lastHeading;
 
     private void OnValidate()
     {
@@ -74,15 +80,26 @@ public class PlayerController : MonoBehaviour
 
         var vel = rb.velocity;
         float ySpeed = vel.y;
+        vel.y = 0;
 
 
+
+        var desVel = inp * speed;
+
+
+        vel = Vector3.MoveTowards(vel, desVel, Time.deltaTime * accel);
 
         if (Grounded)
         {
             if(InputManager.Instance.Actions.Jump.WasPressedThisFrame())
             {
                 ySpeed += jumpValue;
+                anim.OnJump();
             }
+
+
+            anim.SetMovement(vel.magnitude / speed);
+
         }
         else
         {
@@ -90,8 +107,15 @@ public class PlayerController : MonoBehaviour
 
         }
 
+        anim.SetGrounded(Grounded);
 
-        rb.velocity = (inp * speed) + (Vector3.up * ySpeed);
+        rb.velocity = (vel) + (Vector3.up * ySpeed);
+
+
+        lastHeading = vel.normalized.magnitude > 0 ? vel.normalized : lastHeading;
+        Debug.DrawLine(transform.position, transform.position + lastHeading, Color.yellow);
+
+
     }
     void PostMove()
     {
