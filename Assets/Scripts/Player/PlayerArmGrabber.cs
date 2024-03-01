@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class PlayerArmGrabber : MonoBehaviour
@@ -30,17 +31,18 @@ public class PlayerArmGrabber : MonoBehaviour
         sphere.GetComponent<Renderer>().material.color = Color.black;
 
 
-        player.gameObject.GetComponent<ITakeVelocity>();
+        playerVelAccepter = player.gameObject.GetComponent<ITakeVelocity>();
 
+
+    }
+    private void Start()
+    {
 
         InputManager.Instance.Actions.Grab.started += GrabStart;
         InputManager.Instance.Actions.Grab.canceled += GrabStop;
     }
 
-    private void OnDisable()
-    {
-        sphere.transform.position = Vector3.up * -100f;
-    }
+
 
     private void GrabStop(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
@@ -52,7 +54,7 @@ public class PlayerArmGrabber : MonoBehaviour
 
     private void GrabStart(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        var ray = cam.ScreenPointToRay(new Vector3(0.5f, 0.5f, 0));
+        var ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
         bool doHit = Physics.Raycast(ray, out RaycastHit hit, 10f);
 
@@ -64,7 +66,7 @@ public class PlayerArmGrabber : MonoBehaviour
 
             lastRotation = cameraPivot.rotation;
 
-            directionToPlayer = (player.gameObject.transform.position - sphere.transform.position).normalized;
+            directionToPlayer = (player.transform.position - sphere.transform.position);
         }
            
 
@@ -75,11 +77,27 @@ public class PlayerArmGrabber : MonoBehaviour
 
         if (grabbing)
         {
+            var rot = cameraPivot.rotation;
+
+            var agnleDelta = Quaternion.Angle(rot, lastRotation);
+
+            Vector3 vel = Vector3.zero;
 
 
+            var right = Vector3.Cross(directionToPlayer.normalized, cam.transform.forward);
+
+            Debug.DrawLine(player.transform.position, player.transform.position + right, Color.red);
+
+            directionToPlayer = Quaternion.AngleAxis(agnleDelta, right) * directionToPlayer;
 
 
+            var toPoint = directionToPlayer + sphere.transform.position;
 
+            Debug.DrawLine(sphere.transform.position, toPoint);
+
+            vel = toPoint - player.transform.position;
+
+            playerVelAccepter.TakeVelocity(vel);
         }
         else
         {
