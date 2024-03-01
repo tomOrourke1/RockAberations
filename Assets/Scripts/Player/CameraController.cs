@@ -4,15 +4,35 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] Transform cameraOffset;
+
+
+    [Header("Camera Values")]
+    [SerializeField] float camSpeed;
+
+
+
+    float yawAgnle;
+    float pitchAngle;
+
+
+    private void LateUpdate()
     {
-        
+        var inp = InputManager.Instance.Actions.MouseDelta.ReadValue<Vector2>();
+
+
+
+
+
+        Vector3 eulerAngles = new Vector3(pitchAngle, yawAgnle, 0);
+
+
+
+
+
+        cameraOffset.localRotation = Quaternion.Euler(eulerAngles);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
+
 }

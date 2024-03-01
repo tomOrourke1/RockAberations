@@ -11,7 +11,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement Values")]
     [SerializeField] float speed;
-
+    [SerializeField] float jumpValue;
+    [SerializeField] float gravityAmount;
 
 
 
@@ -23,17 +24,29 @@ public class PlayerController : MonoBehaviour
 
     // Collision Info
     int contactCount;
+    int groundCount;
+    int steepCount;
     Vector3 groundNormal;
     Vector3 steepNormal;
-    bool isGrounded;
     float maxGroundDot;
 
 
+    // properties
+    bool Grounded => groundCount > 0;
+    bool Steep => steepCount > 0;
+
+    Vector3 GroundNormal => groundNormal.normalized;
+    Vector3 SteepNormal => steepNormal.normalized;
 
 
     private void OnValidate()
     {
         maxGroundDot = Mathf.Acos(maxGroundAngle);
+    }
+
+    private void Awake()
+    {
+        maxGroundDot = Mathf.Acos(Mathf.Deg2Rad * maxGroundAngle);
     }
 
 
@@ -51,7 +64,7 @@ public class PlayerController : MonoBehaviour
     {
         // determine movement conditions / state
 
-        
+
     }
 
     void Move()
@@ -64,6 +77,18 @@ public class PlayerController : MonoBehaviour
 
 
 
+        if (Grounded)
+        {
+            if(InputManager.Instance.Actions.Jump.WasPressedThisFrame())
+            {
+                ySpeed += jumpValue;
+            }
+        }
+        else
+        {
+            ySpeed -= Time.deltaTime * gravityAmount;
+
+        }
 
 
         rb.velocity = (inp * speed) + (Vector3.up * ySpeed);
@@ -71,9 +96,8 @@ public class PlayerController : MonoBehaviour
     void PostMove()
     {
         // clear conditions
-        contactCount = 0;
+        contactCount = groundCount = steepCount = 0;
         groundNormal = steepNormal = Vector3.zero;
-        isGrounded = false;
     }
 
 
@@ -87,18 +111,24 @@ public class PlayerController : MonoBehaviour
         EvaluateCollision(collision);
     }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        
-    }
-
 
 
     void EvaluateCollision(Collision coll)
     {
         foreach (var c in coll.contacts)
         {
-            
+            if (Vector3.Dot(c.normal, Vector3.up) >= maxGroundDot)
+            {
+                groundNormal += c.normal;
+                groundCount++;
+            }
+            else
+            {
+                steepNormal += c.normal;
+                steepCount++;
+            }
+
+            contactCount++;
         }
     }
 
