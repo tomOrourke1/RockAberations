@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, ITakeVelocity
 {
 
     [Header("Dependencies")]
@@ -33,6 +33,13 @@ public class PlayerController : MonoBehaviour
     float maxGroundDot;
 
 
+
+    // taken velocity
+    Vector3 takedVelocity;
+    bool acceptingVelocity;
+
+
+
     // properties
     bool Grounded => groundCount > 0;
     bool Steep => steepCount > 0;
@@ -41,9 +48,21 @@ public class PlayerController : MonoBehaviour
     Vector3 SteepNormal => steepNormal.normalized;
 
 
+
+    public bool AcceptVel
+    {
+        set { acceptingVelocity = value; }
+        get { return acceptingVelocity; }
+    }
+
+
     Vector3 lastHeading = Vector3.forward;
 
     public Vector3 Heading => lastHeading;
+
+
+
+
 
     private void OnValidate()
     {
@@ -83,7 +102,6 @@ public class PlayerController : MonoBehaviour
         vel.y = 0;
 
 
-
         var desVel = inp * speed;
 
 
@@ -97,9 +115,7 @@ public class PlayerController : MonoBehaviour
                 anim.OnJump();
             }
 
-
             anim.SetMovement(vel.magnitude / speed);
-
         }
         else
         {
@@ -109,7 +125,18 @@ public class PlayerController : MonoBehaviour
 
         anim.SetGrounded(Grounded);
 
-        rb.velocity = (vel) + (Vector3.up * ySpeed);
+
+
+
+        // if grabbing then 
+        if(acceptingVelocity)
+        {
+            rb.velocity = takedVelocity;
+        }
+        else
+        {
+            rb.velocity = (vel) + (Vector3.up * ySpeed) + takedVelocity;
+        }
 
 
         lastHeading = vel.normalized.magnitude > 0 ? vel.normalized : lastHeading;
@@ -119,8 +146,6 @@ public class PlayerController : MonoBehaviour
             rotator.ResetInternals();
         }
 
-        Debug.DrawLine(transform.position, transform.position + lastHeading, Color.yellow);
-
 
     }
     void PostMove()
@@ -128,6 +153,8 @@ public class PlayerController : MonoBehaviour
         // clear conditions
         contactCount = groundCount = steepCount = 0;
         groundNormal = steepNormal = Vector3.zero;
+
+        takedVelocity = Vector3.zero;
     }
 
 
@@ -163,4 +190,11 @@ public class PlayerController : MonoBehaviour
     }
 
 
+
+    public void TakeVelocity(Vector3 velocity)
+    {
+
+        takedVelocity = velocity;
+
+    }
 }

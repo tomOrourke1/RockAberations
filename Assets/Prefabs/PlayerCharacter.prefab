@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 2605578743666582382}
   anim: {fileID: 583604580883418931}
-  rotSpeed: 100
+  rotSpeed: 150
 --- !u!1 &1813491687309068815
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,6 +253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 5982928476066359441}
   anim: {fileID: 583604580883418931}
+  rotator: {fileID: 3220178776736861127}
   speed: 10
   jumpValue: 10
   gravityAmount: 20
