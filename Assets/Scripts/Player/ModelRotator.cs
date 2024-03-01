@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ModelRotator : MonoBehaviour
@@ -12,6 +13,8 @@ public class ModelRotator : MonoBehaviour
     [SerializeField] float rotSpeed = 20.0f;
     Vector3 internalDirection = Vector3.forward;
 
+
+    public Vector3 Direction => internalDirection;
 
 
     private void LateUpdate()
@@ -30,6 +33,12 @@ public class ModelRotator : MonoBehaviour
 
 
 
+        if(dotForward <= -0.3f)
+        {
+            internalDirection = player.Heading;
+        }
+
+
         anim.SetDirection(GetDirectionValue(dotright, dotForward));
 
         internalDirection = Vector3.RotateTowards(internalDirection, player.Heading, Mathf.Deg2Rad * rotSpeed * Time.deltaTime, 0);
@@ -38,6 +47,11 @@ public class ModelRotator : MonoBehaviour
 
 
         transform.localRotation = Quaternion.LookRotation(player.Heading, Vector3.up);
+    }
+
+    public void ResetInternals()
+    {
+        internalDirection = player.Heading;
     }
 
 

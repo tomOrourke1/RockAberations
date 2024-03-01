@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     [Header("Dependencies")]
     [SerializeField] Rigidbody rb;
     [SerializeField] PlayerAnimator anim;
-
+    [SerializeField] ModelRotator rotator;
 
     [Header("Movement Values")]
     [SerializeField] float speed;
@@ -113,6 +113,12 @@ public class PlayerController : MonoBehaviour
 
 
         lastHeading = vel.normalized.magnitude > 0 ? vel.normalized : lastHeading;
+
+        if (!(vel.normalized.magnitude > 0))
+        {
+            rotator.ResetInternals();
+        }
+
         Debug.DrawLine(transform.position, transform.position + lastHeading, Color.yellow);
 
 
