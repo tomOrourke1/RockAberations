@@ -12,6 +12,9 @@ public class PlayerArmGrabber : MonoBehaviour
     [SerializeField] Camera cam;
 
 
+    [SerializeField] LayerMask layermask;
+
+
     Quaternion lastRotation;
 
 
@@ -22,6 +25,11 @@ public class PlayerArmGrabber : MonoBehaviour
     Vector3 directionToPlayer;
 
     ITakeVelocity playerVelAccepter;
+
+
+    public bool Grabing => grabbing;
+    public Vector3 SpherePos => sphere.transform.position;
+
 
     private void Awake()
     {
@@ -56,7 +64,7 @@ public class PlayerArmGrabber : MonoBehaviour
     {
         var ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
-        bool doHit = Physics.Raycast(ray, out RaycastHit hit, 10f);
+        bool doHit = Physics.Raycast(ray, out RaycastHit hit, 10f, layermask);
 
         if (doHit)
         {
@@ -84,7 +92,7 @@ public class PlayerArmGrabber : MonoBehaviour
             Vector3 vel = Vector3.zero;
 
 
-            var right = Vector3.Cross(directionToPlayer.normalized, cam.transform.forward);
+            var right = Vector3.Cross(cam.transform.forward, directionToPlayer.normalized);
 
             Debug.DrawLine(player.transform.position, player.transform.position + right, Color.red);
 
@@ -97,7 +105,8 @@ public class PlayerArmGrabber : MonoBehaviour
 
             vel = toPoint - player.transform.position;
 
-            playerVelAccepter.TakeVelocity(vel);
+          //  playerVelAccepter.TakeVelocity(vel);
+            playerVelAccepter.TakePosition(toPoint);
         }
         else
         {

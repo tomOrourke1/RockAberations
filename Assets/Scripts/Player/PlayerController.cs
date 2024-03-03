@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour, ITakeVelocity
     [SerializeField] Rigidbody rb;
     [SerializeField] PlayerAnimator anim;
     [SerializeField] ModelRotator rotator;
+    [SerializeField] SimpleMotor motor;
 
     [Header("Movement Values")]
     [SerializeField] float speed;
@@ -24,6 +25,10 @@ public class PlayerController : MonoBehaviour, ITakeVelocity
     [SerializeField] float maxGroundAngle = 45f;
 
 
+
+    [Header("Grab Value")]
+    [SerializeField] float grabMoveForce = 5f;
+
     // Collision Info
     int contactCount;
     int groundCount;
@@ -36,6 +41,7 @@ public class PlayerController : MonoBehaviour, ITakeVelocity
 
     // taken velocity
     Vector3 takedVelocity;
+    Vector3 grabPos;
     bool acceptingVelocity;
 
 
@@ -131,7 +137,8 @@ public class PlayerController : MonoBehaviour, ITakeVelocity
         // if grabbing then 
         if(acceptingVelocity)
         {
-            rb.velocity = takedVelocity;
+            var dir = grabPos - transform.position;
+            rb.velocity = motor.Move(dir, Time.deltaTime) * grabMoveForce;
         }
         else
         {
@@ -196,5 +203,10 @@ public class PlayerController : MonoBehaviour, ITakeVelocity
 
         takedVelocity = velocity;
 
+    }
+
+    public void TakePosition(Vector3 position)
+    {
+        grabPos = position;
     }
 }

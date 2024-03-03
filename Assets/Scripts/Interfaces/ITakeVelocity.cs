@@ -7,5 +7,6 @@ public interface ITakeVelocity
 
     public abstract void TakeVelocity(Vector3 velocity);
 
+    public abstract void TakePosition(Vector3 position);
 
 }
