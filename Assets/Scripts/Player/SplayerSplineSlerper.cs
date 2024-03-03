@@ -68,10 +68,12 @@ public class SplayerSplineSlerper : MonoBehaviour
 
     public void StartLick()
     {
-        licking = true;
-        tonguePoint = 0;
+        licking = false;
+        tonguePoint = 1;
         direction = 1.0f;
         destination = true;
+
+        splineEx.Range = new Vector2(0, tonguePoint);
 
 
         speed = lickSpeedOut;
@@ -81,7 +83,7 @@ public class SplayerSplineSlerper : MonoBehaviour
     public void StopLick()
     {
         licking = true;
-        tonguePoint = 100;
+        tonguePoint = 1;
         direction = -1.0f;
         destination = false;
 
