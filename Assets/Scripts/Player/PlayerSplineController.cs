@@ -26,12 +26,12 @@ public class PlayerSplineController : MonoBehaviour
 
 
 
-    private void LateUpdate()
+    private void Update()
     {
         if(arm.Grabing)
         {
             r.enabled = true;
-            spline.enabled = true;
+           // spline.enabled = true;
 
             var s = spline[0][controlNodeIndex];
 
@@ -48,8 +48,8 @@ public class PlayerSplineController : MonoBehaviour
         }
         else
         {
-            spline.enabled = false;
-            r.enabled = false;
+          //  spline.enabled = false;
+          //  r.enabled = false;
 
         }
     }

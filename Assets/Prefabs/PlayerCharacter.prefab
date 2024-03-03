@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1384478275365829472}
   - component: {fileID: 8165886932215112754}
   - component: {fileID: 5224806549274785876}
+  - component: {fileID: 3816717562723977474}
   m_Layer: 0
   m_Name: SplineRoot
   m_TagString: Untagged
@@ -205,8 +206,8 @@ MonoBehaviour:
   m_Sides: 8
   m_SegmentsPerUnit: 50
   m_Capped: 1
-  m_Radius: 0.07
-  m_Range: {x: 0, y: 1}
+  m_Radius: 0.05
+  m_Range: {x: 0, y: 0}
 --- !u!114 &5224806549274785876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,6 +224,22 @@ MonoBehaviour:
   arm: {fileID: 8011789917740414583}
   armMat: {fileID: 2100000, guid: d5df0a9138284ea4bafd0bf375fcbcd2, type: 2}
   controlNodeIndex: 2
+--- !u!114 &3816717562723977474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261003472221952761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec58f1778fe03c7418bafae737e5e792, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  splineEx: {fileID: 8165886932215112754}
+  armGrabber: {fileID: 8011789917740414583}
+  lickSpeedOut: 3
+  lickSpeedIn: 2
 --- !u!1 &1661625371514595641
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,6 +801,7 @@ GameObject:
   - component: {fileID: 3970699196810876368}
   - component: {fileID: 7830583229608937340}
   - component: {fileID: 7605465191935949695}
+  - component: {fileID: 8839973321486651899}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -909,6 +927,18 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!114 &8839973321486651899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6658529386213011349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b2a14511dcdd3e478fb774cd4a6eaf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6802400733043561722
 GameObject:
   m_ObjectHideFlags: 0

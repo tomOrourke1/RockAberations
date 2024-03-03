@@ -27,9 +27,9 @@ public class ModelRotator : MonoBehaviour
         float dotright = Vector3.Dot(internalDirection, right);
         float dotForward = Vector3.Dot(internalDirection, player.Heading);
 
-        Debug.Log("right val : " + dotright);
+   //     Debug.Log("right val : " + dotright);
 
-        Debug.DrawLine(transform.position, transform.position + internalDirection, Color.red);
+     //   Debug.DrawLine(transform.position, transform.position + internalDirection, Color.red);
 
 
 

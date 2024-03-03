@@ -31,6 +31,10 @@ public class PlayerArmGrabber : MonoBehaviour
     public Vector3 SpherePos => sphere.transform.position;
 
 
+    public event Action OnGrabStart;
+    public event Action OnGrabStop;
+
+
     private void Awake()
     {
         sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -54,6 +58,8 @@ public class PlayerArmGrabber : MonoBehaviour
 
     private void GrabStop(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        OnGrabStop?.Invoke();
+
         grabbing = false;
         sphere.transform.position = Vector3.up * -100f;
         player.AcceptVel = false;
@@ -68,6 +74,8 @@ public class PlayerArmGrabber : MonoBehaviour
 
         if (doHit)
         {
+            OnGrabStart?.Invoke();
+
             sphere.transform.position = hit.point;
             grabbing = true;
             player.AcceptVel = true;
